@@ -16,5 +16,8 @@
     },
     "autoload": {
         "files": ["lib/password.php"]
+    },
+    "require": {
+        "paragonie/random_compat": "^1.1"
     }
 }

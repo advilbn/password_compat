@@ -101,6 +101,23 @@ namespace {
             } else {
                 $buffer = '';
                 $buffer_valid = false;
+
+                if(function_exists('random_bytes')) {
+                    try {
+                        $string = random_bytes($raw_salt_len);
+                        $buffer_valid = true;
+                    } catch (TypeError $e) {
+                        // Well, it's an integer, so this IS unexpected.
+                        return false;
+                    } catch (Error $e) {
+                        // This is also unexpected because 32 is a reasonable integer.
+                        return false;
+                    } catch (Exception $e) {
+                        // If you get this message, the CSPRNG failed hard.
+                        return false;
+                    }
+                }
+
                 if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
                     $buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);
                     if ($buffer) {
